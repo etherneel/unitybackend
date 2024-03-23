@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const OrderController_1 = __importDefault(require("../controller/TestByBitsAc/OrderController"));
+const UserTreadController_1 = __importDefault(require("../controller/UserTreadController"));
+const OrderPlaceByWS_LeaderController_1 = __importDefault(require("../controller/TestByBitsAc/OrderPlaceByWS_LeaderController"));
+const OrderRouter = express_1.default.Router();
+OrderRouter.get("/OrdersHistory", (0, cors_1.default)(), OrderController_1.default.getOrderCtr);
+OrderRouter.get("/ActiveOrders", (0, cors_1.default)(), OrderController_1.default.getActiveOrders);
+OrderRouter.get("/SpotBorrow", (0, cors_1.default)(), OrderController_1.default.getSpotBorrowCheck);
+OrderRouter.get("/AccountInfo", (0, cors_1.default)(), OrderController_1.default.getAccountInfo);
+OrderRouter.get("/WalletBalance", (0, cors_1.default)(), OrderController_1.default.getWalletBalance);
+OrderRouter.post("/placeOrder", (0, cors_1.default)(), UserTreadController_1.default.GetOrder_PlaceOrder);
+OrderRouter.post("/calOrder", (0, cors_1.default)(), UserTreadController_1.default.WalletPriceCalculate);
+OrderRouter.post("/chkOrder", (0, cors_1.default)(), OrderPlaceByWS_LeaderController_1.default.ChkAcPlaceOrder);
+OrderRouter.post("/chkFollowers", (0, cors_1.default)(), OrderPlaceByWS_LeaderController_1.default.OnWSInitByLeads);
+// OrderRouter.get("",cors(), OrderController.placeOrderCtr);
+// OrderRouter.get("",cors(), OrderController.placeOrderCtr);
+exports.default = OrderRouter;

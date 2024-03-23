@@ -1,0 +1,96 @@
+{
+    "name": "CUN",
+    "description": "CUN CRUD REST API",
+    "repository": "",
+    "logo": "",
+    "keywords": [
+        "node",
+        "typescript",
+        "crud",
+        "seanwasere"
+    ],
+    "database": {
+        "connectionstring1": "mongodb+srv://bitcode29:mongooes123@maxcluster.iamdsfn.mongodb.net/?retryWrites=true&w=majority&appName=maxcluster",
+        "connectionstring": "mongodb://localhost:27017/TaskManager"
+    },
+    "bybit": {
+        "baseurl": "",
+        "account": {
+            "v5AccountWalletBalanceEndpoint": "v5/account/wallet-balance",
+            "v5AccountUpgradeToUtaEndpoint": "v5/account/upgrade-to-uta",
+            "v5AccountBorrowHistoryEndpoint": "v5/account/borrow-history",
+            "v5AccountCollateralInfoEndpoint": "v5/account/collateral-info",
+            "v5AssetCoinGreeksEndpoint": "v5/asset/coin-greeks",
+            "v5AccountFeeRateEndpoint": "v5/account/fee-rate",
+            "v5AccountInfoEndpoint": "v5/account/info",
+            "v5AccountTransactionLogEndpoint": "v5/account/transaction-log",
+            "v5AccountSetMarginModeEndpoint": "v5/account/set-margin-mode",
+            "v5AccountMmpModifyEndpoint": "v5/account/mmp-modify",
+            "v5AccountMmpResetEndpoint": "v5/account/mmp-reset",
+            "v5AccountMmpStateEndpoint": "v5/account/mmp-state"
+        },
+        "user": {
+            "v5UserCreateSubMemberEndpoint": "v5/user/create-sub-member",
+            "v5UserCreateSubApiEndpoint": "v5/user/create-sub-api",
+            "v5UserQuerySubMembersEndpoint": "v5/user/query-sub-members",
+            "v5UserFrozenSubMemberEndpoint": "v5/user/frozen-sub-member",
+            "v5UserQueryApiEndpoint": "v5/user/query-api",
+            "v5UserUpdateApiEndpoint": "v5/user/update-api",
+            "v5UserUpdateSubApiEndpoint": "v5/user/update-sub-api",
+            "v5UserDeleteApiEndpoint": "v5/user/delete-api",
+            "v5UserDeleteSubApiEndpoint": "v5/user/delete-sub-api"
+        },
+        "trade": {
+            "v5OrderCreateEndpoint": "v5/order/create",
+            "v5OrderAmendEndpoint": "v5/order/amend",
+            "v5OrderCancelEndpoint": "v5/order/cancel",
+            "v5OrderRealtimeEndpoint": "v5/order/realtime",
+            "v5OrderCancelAllEndpoint": "v5/order/cancel-all",
+            "v5OrderHistoryEndpoint": "v5/order/history",
+            "v5OrderCreateBatchEndpoint": "v5/order/create-batch",
+            "v5OrderAmendBatchEndpoint": "v5/order/amend-batch",
+            "v5OrderCancelBatchEndpoint": "v5/order/cancel-batch",
+            "v5OrderSpotBorrowCheckEndpoint": "v5/order/spot-borrow-check",
+            "v5OrderDisconnectedCancelAllEndpoint": "v5/order/disconnected-cancel-all"
+        },
+        "client": {
+            "v5MarketKlineEndpoint": "v5/market/kline",
+            "v5MarketMarkPriceKlineEndpoint": "v5/market/mark-price-kline",
+            "v5MarketIndexPriceKlineEndpoint": "v5/market/index-price-kline",
+            "v5MarketPremiumIndexPriceKlineEndpoint": "v5/market/premium-index-price-kline",
+            "v5InstrumentsInfoEndpoint": "v5/market/instruments-info",
+            "v5MarketOrderbookEndpoint": "v5/market/orderbook",
+            "v5MarketTickersEndpoint": "v5/market/tickers",
+            "v5MarketFundingHistoryEndpoint": "v5/market/funding/history",
+            "v5MarketRecentTradeEndpoint": "v5/market/recent-trade",
+            "v5MarketOpenInterestEndpoint": "v5/market/open-interest",
+            "v5MarketHistoricalVolatilityEndpoint": "v5/market/historical-volatility",
+            "v5MarketInsuranceEndpoint": "v5/market/insurance",
+            "v5MarketRiskLimitEndpoint": "v5/market/risk-limit",
+            "v5MarketDeliveryPriceEndpoint": "v5/market/delivery-price"
+        },
+        "position": {
+            "v5PositionListEndpoint": "v5/position/list",
+            "v5PositionSetLeverageEndpoint": "v5/position/set-leverage",
+            "v5PositionSwitchIsolatedEndpoint": "v5/position/switch-isolated",
+            "v5PositionSetTpslModeEndpoint": "v5/position/set-tpsl-mode",
+            "v5PositionSwitchModeEndpoint": "v5/position/switch-mode",
+            "v5PositionSetRiskLimitEndpoint": "v5/position/set-risk-limit",
+            "v5PositionTradingStopEndpoint": "v5/position/trading-stop",
+            "v5PositionSetAutoAddMarginEndpoint": "v5/position/set-auto-add-margin",
+            "v5ExecutionListEndpoint": "v5/execution/list",
+            "v5PositionClosedPnlEndpoint": "v5/position/closed-pnl"
+        }
+    },
+    "SendBox": {
+        "IS_LIVE": true,
+        "SMTP_HOST": "smtp.hostinger.in",
+        "SMTP_PORT": 465,
+        "SMTP_USER": "no-reply@bit-code.in",
+        "SMTP_FROM_USER": "no-reply@bit-code.in",
+        "SMTP_PASSWORD": "Test@1234",
+        "SMTP_LIVE_USER": "no-reply@unitytrade.io",
+        "SMTP_LIVE_FROM_USER": "no-reply@unitytrade.io",
+        "SMTP_LIVE_PASSWORD": "Biicode@123"
+    }
+}

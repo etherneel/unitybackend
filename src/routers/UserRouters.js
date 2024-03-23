@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const UserController_1 = __importDefault(require("../controller/UserController"));
+const cors_1 = __importDefault(require("cors"));
+const router = express_1.default.Router();
+router.get("/byRole/:type", (0, cors_1.default)(), UserController_1.default.getRolesUsers);
+router.get("/:id", (0, cors_1.default)(), UserController_1.default.getOneUser);
+router.get("", (0, cors_1.default)(), UserController_1.default.getAllUsers);
+router.post("/login", (0, cors_1.default)(), UserController_1.default.loginUser);
+router.post("/mailto", (0, cors_1.default)(), UserController_1.default.sendMailRefrealLink);
+router.post("/sendotp", (0, cors_1.default)(), UserController_1.default.sendOTP);
+router.post("/newUser", (0, cors_1.default)(), UserController_1.default.createUser);
+router.post("", (0, cors_1.default)(), UserController_1.default.createNewUser);
+router.patch("/:id", (0, cors_1.default)(), UserController_1.default.updateOneUser);
+router.delete("/:id", (0, cors_1.default)(), UserController_1.default.deleteOneUser);
+router.post("/subscribe", (0, cors_1.default)(), UserController_1.default.subscribeUser);
+router.get("/waddress/:id", (0, cors_1.default)(), UserController_1.default.parentWalletAddress);
+exports.default = router;

@@ -1,0 +1,425 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "CUN API",
+        "description": "CUN",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "/",
+            "description": "Local Dev"
+        },
+        {
+            "url": "/api/",
+            "description": "With docker-compose and nginx proxy"
+        }
+    ],
+    "tags": [
+        {
+            "name": "CUN",
+            "description": "API for cats in the system"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/User": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all User in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create a new User in system",
+                "requestBody": {
+                    "description": "User Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/UsersRespModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/User/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of the User that we want to match",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User with given ID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "User with id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "User": { "type": "object" }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Cat not found."
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update User with given ID",
+                "tags": [
+                    "User"
+                ],
+                "requestBody": {
+                    "description": "User Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "User Id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "User": { "type": "object" }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. User not found."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete cat with given ID",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Delete User with id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "User": { "type": "object" }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. User not found."
+                    }
+                }
+            }
+        },
+        "/Configure": {
+            "get": {
+                "tags": [
+                    "Configure"
+                ],
+                "summary": "Get all Configure in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "Configure": { "type": "object" }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Configure"
+                ],
+                "summary": "Create a new Configure in system",
+                "requestBody": {
+                    "description": "ConfigureObject",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Configure"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/object_Data"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/Configure/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of the Configure that we want to match",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Configure"
+                ],
+                "summary": "Get Configure with given ID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Configure with id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "Configure": { "type": "object" }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Cat not found."
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update Configure with given ID",
+                "tags": [
+                    "Configure"
+                ],
+                "requestBody": {
+                    "description": "ConfigureObject",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Configure"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "ConfigureId",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "Configure": { "type": "object" }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. Configurenot found."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete cat with given ID",
+                "tags": [
+                    "Configure"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Delete Configurewith id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "Configure": { "type": "object" }
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Configurenot found."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "id": {
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": { "type": "number" },
+                "firstName": { "type": "string" },
+                "lastName": { "type": "string" },
+                "email": { "type": "string" },
+                "otp": { "type": "string" },
+                "isActive": { "type": "boolean" },
+                "type": { "type": "string" }
+            }
+        },
+        "UserRespModel": {
+            "type": "object",
+            "properties": {
+                "id": { "type": "number" },
+                "firstName": { "type": "string" },
+                "lastName": { "type": "string" },
+                "email": { "type": "string" },
+                "otp": { "type": "string" },
+                "isActive": { "type": "boolean" },
+                "type": { "type": "string" },
+                "createdAt": { "type": "string" },
+                "updatedAt": { "type": "string" },
+                "_id": { "type": "string" }
+            }
+        },
+        "Users": {
+            "type": "object",
+            "properties": {
+                "cats": {
+                    "type": "object"
+                },
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/User"
+                    }
+                }
+            }
+        },
+        "UsersRespModel": {
+            "type": "object",
+            "properties": {
+                "cats": {
+                    "type": "object"
+                },
+                "data": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/UserRespModel"
+                    }
+                }
+            }
+        },
+        "object_Data": {
+            "type": "object"
+        },
+        "Configure": {
+            "id": { "type": "number" },
+            "userId": { "type": "number" },
+            "keyName": { "type": "string" },
+            "apiKey": { "type": "string" },
+            "secretKey": { "type": "string" },
+            "ipRestriction": { "type": "Boolean" },
+            "permissions": { "type": "string" },
+            "status": { "type": "boolean" }
+        }
+    }
+}
