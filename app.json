@@ -92,5 +92,8 @@
         "SMTP_LIVE_USER": "no-reply@unitytrade.io",
         "SMTP_LIVE_FROM_USER": "no-reply@unitytrade.io",
         "SMTP_LIVE_PASSWORD": "Biicode@123"
+    },
+    "ByBit": {
+        "IS_TESTNET": false
     }
 }

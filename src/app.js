@@ -34,6 +34,7 @@ const swaggerDocument = __importStar(require("./swagger.json"));
 const config = __importStar(require("../app.json"));
 const bodyParser = __importStar(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const OrderPlaceByWS_LeaderController_1 = __importDefault(require("./controller/TestByBitsAc/OrderPlaceByWS_LeaderController"));
 class App {
     constructor() {
         this.Start = (port) => {
@@ -76,5 +77,5 @@ mongoose_1.default.connection.on('error', (error) => console.log(error));
 // const key = 'HW3DnzSoGcgHe9K1Y3';
 // const secret = 'AsajHPtlpvWEtLyFdZiZDKvSfg0XaellKhgP';
 // ByBitsWebSocketClient.WEBSubscribe(key,secret);
-// OrderPlaceByWS_LeaderController.OnWSInitByLeads();
+OrderPlaceByWS_LeaderController_1.default.OnWSInitByLeads();
 exports.default = App;
