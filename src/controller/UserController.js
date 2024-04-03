@@ -12,13 +12,14 @@ const otp_generator_1 = __importDefault(require("otp-generator"));
 const TemplatesEmail_1 = require("../models/TemplatesEmail");
 const sendMail_1 = __importDefault(require("../services/sendMail"));
 const OtpService_1 = __importDefault(require("../services/OtpService"));
+const Encrypt_Decrypt_Service_1 = __importDefault(require("../services/Encrypt_Decrypt_Service"));
 const getAllUsers = async (req, res) => {
     try {
         let allUsers = [];
         allUsers = await UserService_1.default.getAllUsers_Data();
         let _usersLst = [];
         _usersLst = allUsers.filter((x) => x.isDelete == 0);
-        res.send({ status: "200", data: _usersLst });
+        res.status(200).send({ status: 200, data: _usersLst });
     }
     catch (error) {
         res
@@ -33,7 +34,8 @@ const getRolesUsers = async (req, res) => {
         allUsers = await UserService_1.default.getAllUsers_Data();
         let _usersLst = [];
         _usersLst = allUsers.filter((x) => x.type == userType && x.isDelete == 0);
-        res.send({ status: 200, data: _usersLst });
+        res.status(200).send({ status: 200, data: _usersLst });
+        return;
     }
     catch (error) {
         res
@@ -48,6 +50,7 @@ const getOneUser = async (req, res) => {
             status: 400,
             error: "Parameter ':UserId' can not be empty"
         });
+        return;
     }
     try {
         const User = await UserService_1.default.getOneUser(UserId);
@@ -79,6 +82,7 @@ const updateOneUser = async (req, res) => {
     const UserId = parseInt(req.params.id);
     if (!UserId) {
         res.status(400).send({ status: 400, error: "Parameter ':UserId' can not be empty" });
+        return;
     }
     try {
         let User = {};
@@ -95,6 +99,7 @@ const deleteOneUser = async (req, res) => {
     const UserId = parseInt(req.params.id);
     if (!UserId) {
         res.status(400).send({ status: 400, error: "Parameter ':UserId' can not be empty" });
+        return;
     }
     try {
         let Userdele = await UserService_1.default.deleteOneUser(UserId);
@@ -149,6 +154,7 @@ const sendMailRefrealLink = async (req, res) => {
         let mailsend = await sendMail_1.default.passMail(model.toMail, text, subject);
         if (mailsend == true) {
             res.send({ status: 200, data: "Refral Mail Send Successfully..." });
+            return;
         }
         else {
             res.status((mailsend === null || mailsend === void 0 ? void 0 : mailsend.status) || 500)
@@ -268,8 +274,34 @@ const subscribeUser = async (req, res) => {
 const parentWalletAddress = async (req, res) => {
     try {
         let userrefId = (req.params.id);
+        if (userrefId == '') {
+            res.status(400).send({
+                status: 400,
+                error: "Parameter ':Id' can not be empty"
+            });
+            return;
+        }
         const createdUser = await UserService_1.default.getUserWallet(userrefId);
         res.status(200).send({ status: 200, data: createdUser });
+    }
+    catch (error) {
+        res.status((error === null || error === void 0 ? void 0 : error.status) || 500).send({ status: (error === null || error === void 0 ? void 0 : error.status) || 500, error: (error === null || error === void 0 ? void 0 : error.message) || error });
+    }
+};
+const checkInDec = async (req, res) => {
+    try {
+        let id = (req.params.id);
+        let text = (req.params.text);
+        if (id == '1') {
+            const createdUser = await Encrypt_Decrypt_Service_1.default.encrypt(text);
+            res.status(200).send({ status: 200, data: createdUser });
+            return;
+        }
+        else {
+            const createdUser = await Encrypt_Decrypt_Service_1.default.decrypt(text);
+            res.status(200).send({ status: 200, data: createdUser });
+            return;
+        }
     }
     catch (error) {
         res.status((error === null || error === void 0 ? void 0 : error.status) || 500).send({ status: (error === null || error === void 0 ? void 0 : error.status) || 500, error: (error === null || error === void 0 ? void 0 : error.message) || error });
@@ -286,5 +318,5 @@ exports.default = {
     sendMailRefrealLink,
     loginUser, sendOTP,
     createUser,
-    subscribeUser, parentWalletAddress
+    subscribeUser, parentWalletAddress, checkInDec
 };

@@ -32,7 +32,7 @@ const getOneUser = async (UserId) => {
     }
 };
 const createNewUser = async (newUser) => {
-    const UserToInsert = new User_1.User(Object.assign(Object.assign({}, newUser), { createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+    const UserToInsert = new User_1.User(Object.assign(Object.assign({}, newUser), { isSubscribe: false, referral: "", walletAddress: newUser.walletAddress != null && newUser.walletAddress != undefined ? newUser.walletAddress : "", amount: 0, parentRefId: newUser.parentRefId != null && newUser.parentRefId != undefined ? newUser.parentRefId : "", createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
     try {
         let checkMail = await User_1.User.findOne({ email: UserToInsert.email });
         if (checkMail != null) {
@@ -75,7 +75,6 @@ const createNewUser = async (newUser) => {
 };
 const IsExistRefCode = async () => {
     let refCode_Temp = (0, uuid_1.v4)();
-    debugger;
     let chkIsExsists_RefCod = await User_1.User.findOne({ referalCode: refCode_Temp.toString() });
     if (chkIsExsists_RefCod != null && chkIsExsists_RefCod != undefined) {
         let data = await IsExistRefCode();

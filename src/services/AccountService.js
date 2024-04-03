@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Account_1 = require("../models/Account");
 const CounterTbls_1 = require("../models/CounterTbls");
+const Encrypt_Decrypt_Service_1 = __importDefault(require("./Encrypt_Decrypt_Service"));
 const getAllAccounts_Data = async () => {
     try {
         let AccountData = await Account_1.Account.find({}).then((Accounts) => {
@@ -32,7 +36,8 @@ const getOneAccount = async (AccountId) => {
 };
 const getOneAccountByUserIdAndApiKey = async (userId, apiKey) => {
     try {
-        const AccountData = await Account_1.Account.findOne({ userId: userId, apiKey: apiKey });
+        let key = Encrypt_Decrypt_Service_1.default.encrypt(apiKey);
+        const AccountData = await Account_1.Account.findOne({ userId: userId, apiKey: key });
         if (AccountData == null) {
             throw {
                 status: 400,
@@ -61,26 +66,13 @@ const getOneAccountByUserId = async (userId) => {
     }
 };
 const createAndUpdateAccount = async (newAccount) => {
-    const AccountToInsert = new Account_1.Account(Object.assign(Object.assign({}, newAccount), { isActive: true, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+    let key = Encrypt_Decrypt_Service_1.default.encrypt(newAccount.apiKey);
+    let secretKey = Encrypt_Decrypt_Service_1.default.encrypt(newAccount.secretKey);
+    const AccountToInsert = new Account_1.Account(Object.assign(Object.assign({}, newAccount), { isActive: true, apiKey: key, secretKey: secretKey, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
     let isMaster = AccountToInsert.isMaster;
     try {
         await Account_1.Account.findOneAndUpdate({ userId: AccountToInsert.userId, isMaster: isMaster }, { isActive: false })
             .then(async (data) => { });
-        //   let chk =  await Account.find({ userId: AccountToInsert.userId, iaMaster:isMaster  })
-        //         .then(async (data: any) => { 
-        //             data.forEach(async ele => {
-        //                let model = ele;
-        //                 let acModel  = new Account({
-        //                     ...model,
-        //                  _id:ele._id,
-        //                 isActive:false,
-        //                 createdDate: ele.createdDate,
-        //                 updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
-        //                 });
-        //                  await Account.updateOne({ id: ele.id, userId: ele.userId}, 
-        //                     acModel).then((Configure:any) => { return Configure });
-        //             });
-        //         });
         let tempdata = await Account_1.Account.findOneAndUpdate({ apiKey: AccountToInsert.apiKey, userId: AccountToInsert.userId }, { $set: { AccountToInsert } }, { new: true })
             .then(async (data) => {
             // let tepdata = await Account.findOneAndUpdate({apiKey: AccountToInsert.apiKey, userId: AccountToInsert.userId}, {$set:{});
@@ -167,9 +159,30 @@ const isAvailbleMaster = async (AccountId) => {
         throw { status: (error === null || error === void 0 ? void 0 : error.status) || 500, message: (error === null || error === void 0 ? void 0 : error.message) || error };
     }
 };
-const getDetailByKey = async (apiKey, secretKey) => {
+const updateOneAcDetail = async (UserId, newAccount) => {
     try {
-        const data = await Account_1.Account.findOne({ apiKey: apiKey, secretKey: secretKey });
+        const indexForUpdate = await Account_1.Account.findOne({ id: UserId });
+        if (indexForUpdate == null) {
+            throw { status: 400, message: `Can't find User with the id '${UserId}'` };
+        }
+        const updatedUser = new Account_1.Account(Object.assign(Object.assign({}, newAccount), { _id: indexForUpdate._id, id: UserId, avBalance: newAccount.avBalance, mainBalance: newAccount.mainBalance, createdDate: indexForUpdate.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+        let updateUsers = await Account_1.Account.updateOne({ 'id': UserId }, updatedUser)
+            .then((user) => {
+            if (user == null) {
+                throw { status: 400, message: `Can't find User with the id '${UserId}'`, };
+            }
+        });
+        return updatedUser;
+    }
+    catch (error) {
+        throw { status: (error === null || error === void 0 ? void 0 : error.status) || 500, message: (error === null || error === void 0 ? void 0 : error.message) || error };
+    }
+};
+const getDetailByKey = async (apiKey, secKey) => {
+    try {
+        let key = Encrypt_Decrypt_Service_1.default.encrypt(apiKey);
+        let secretKey = Encrypt_Decrypt_Service_1.default.encrypt(secKey);
+        const data = await Account_1.Account.findOne({ apiKey: key, secretKey: secretKey });
         if (data == null) {
             return null;
         }
@@ -189,5 +202,6 @@ exports.default = {
     getOneAccountByUserIdAndApiKey,
     isAvailbleMaster,
     isAvailble_Master_Valid,
-    getDetailByKey
+    getDetailByKey,
+    updateOneAcDetail
 };

@@ -26,7 +26,9 @@ const AccountSchema = new mongoose_1.default.Schema({
     createdDate: { type: String },
     updatedDate: { type: String },
     secretKey: { type: String },
-    isActive: { type: Boolean, default: false }
+    isActive: { type: Boolean, default: false },
+    avBalance: { type: String },
+    mainBalance: { type: String },
 }, {
     versionKey: false,
     collection: 'Account'

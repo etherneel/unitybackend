@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const CounterTbls_1 = require("../models/CounterTbls");
-const PlaceOrder_1 = require("../models/PlaceOrder");
-const getAllPlaceOrders_Data = async () => {
+const LtPlaceOrder_1 = require("../models/LtPlaceOrder");
+const getAllLtPlaceOrders_Data = async () => {
     try {
-        let data = await PlaceOrder_1.PlaceOrder.find({}).then((x) => { return x; }).catch((e) => { return e; });
+        let data = await LtPlaceOrder_1.LtPlaceOrder.find({}).then((x) => { return x; }).catch((e) => { return e; });
         return data;
     }
     catch (error) {
@@ -13,7 +13,7 @@ const getAllPlaceOrders_Data = async () => {
 };
 const getOrder_Data = async (orderId) => {
     try {
-        let data = await PlaceOrder_1.PlaceOrder.find({}).then((x) => { return x; }).catch((e) => { return e; });
+        let data = await LtPlaceOrder_1.LtPlaceOrder.find({}).then((x) => { return x; }).catch((e) => { return e; });
         return data;
     }
     catch (error) {
@@ -21,11 +21,11 @@ const getOrder_Data = async (orderId) => {
     }
 };
 const createAndUpdateOrder = async (_new) => {
-    let checkav = await PlaceOrder_1.PlaceOrder.findOne({ LtOrderId: _new.LtOrderId, UserId: _new.UserId });
+    let checkav = await LtPlaceOrder_1.LtPlaceOrder.findOne({ orderId: _new.orderId });
     if (checkav != null) {
         try {
-            const _updated = new PlaceOrder_1.PlaceOrder(Object.assign(Object.assign({}, _new), { _id: checkav._id, id: checkav.id, createdDate: checkav.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
-            let updateOrder = await PlaceOrder_1.PlaceOrder.updateOne({ 'id': checkav.id }, _updated)
+            const _updated = new LtPlaceOrder_1.LtPlaceOrder(Object.assign(Object.assign({}, _new), { _id: checkav._id, id: checkav.id, avBalance: checkav.avBalance, mainBalance: checkav.mainBalance, createdDate: checkav.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+            let updateOrder = await LtPlaceOrder_1.LtPlaceOrder.updateOne({ 'id': checkav.id }, _updated)
                 .then((user) => {
                 if (user == null) {
                     throw { status: 400, message: `Can't find Order with the id '${checkav.id}'`, };
@@ -38,9 +38,9 @@ const createAndUpdateOrder = async (_new) => {
         }
     }
     else {
+        const _toInsert = new LtPlaceOrder_1.LtPlaceOrder(Object.assign(Object.assign({}, _new), { createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
         try {
-            const _toInsert = new PlaceOrder_1.PlaceOrder(Object.assign(Object.assign({}, _new), { createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
-            let CountId = await CounterTbls_1.CounterTbls.findOneAndUpdate({ name: 'PlaceOrder' }, { "$inc": { seq: 1 } }, { new: true }).then(async (cd) => {
+            let CountId = await CounterTbls_1.CounterTbls.findOneAndUpdate({ name: 'LtPlaceOrder' }, { "$inc": { seq: 1 } }, { new: true }).then(async (cd) => {
                 console.log("Counter Val ", cd);
                 let seqId = 0;
                 if (cd == null || cd == undefined) {
@@ -69,14 +69,14 @@ const createAndUpdateOrder = async (_new) => {
     }
 };
 const createOrder = async (_new) => {
-    const _toInsert = new PlaceOrder_1.PlaceOrder(Object.assign(Object.assign({}, _new), { createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+    const _toInsert = new LtPlaceOrder_1.LtPlaceOrder(Object.assign(Object.assign({}, _new), { createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
     try {
-        let checkav = await PlaceOrder_1.PlaceOrder.findOne({ orderId: _toInsert.orderId });
+        let checkav = await LtPlaceOrder_1.LtPlaceOrder.findOne({ orderId: _toInsert.orderId });
         if (checkav != null) {
             throw { status: 400, message: `Order with the orderId is '${_toInsert.orderId}' already exists` };
         }
         if (checkav == null) {
-            let CountId = await CounterTbls_1.CounterTbls.findOneAndUpdate({ name: 'PlaceOrder' }, { "$inc": { seq: 1 } }, { new: true }).then(async (cd) => {
+            let CountId = await CounterTbls_1.CounterTbls.findOneAndUpdate({ name: 'LtPlaceOrder' }, { "$inc": { seq: 1 } }, { new: true }).then(async (cd) => {
                 console.log("Counter Val ", cd);
                 let seqId = 0;
                 if (cd == null || cd == undefined) {
@@ -109,12 +109,12 @@ const createOrder = async (_new) => {
 };
 const updateOrder = async (Id, changes) => {
     try {
-        const indexForUpdate = await PlaceOrder_1.PlaceOrder.findOne({ id: Id });
+        const indexForUpdate = await LtPlaceOrder_1.LtPlaceOrder.findOne({ id: Id });
         if (indexForUpdate == null) {
             throw { status: 400, message: `Can't find Order with the id '${Id}'` };
         }
-        const _updated = new PlaceOrder_1.PlaceOrder(Object.assign(Object.assign({}, changes), { _id: indexForUpdate._id, id: Id, createdDate: indexForUpdate.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
-        let updateOrder = await PlaceOrder_1.PlaceOrder.updateOne({ 'id': Id }, _updated)
+        const _updated = new LtPlaceOrder_1.LtPlaceOrder(Object.assign(Object.assign({}, changes), { _id: indexForUpdate._id, id: Id, createdDate: indexForUpdate.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+        let updateOrder = await LtPlaceOrder_1.LtPlaceOrder.updateOne({ 'id': Id }, _updated)
             .then((user) => {
             if (user == null) {
                 throw { status: 400, message: `Can't find Order with the id '${Id}'`, };
@@ -128,14 +128,14 @@ const updateOrder = async (Id, changes) => {
 };
 const deleteOrder = async (Id) => {
     try {
-        const indexForDeletion = await PlaceOrder_1.PlaceOrder.findOne({ id: Id });
+        const indexForDeletion = await LtPlaceOrder_1.LtPlaceOrder.findOne({ id: Id });
         if (indexForDeletion == null) {
             throw {
                 status: 400,
                 message: `Can't find Order with the id '${Id}'`,
             };
         }
-        await PlaceOrder_1.PlaceOrder.deleteOne({ 'id': Id });
+        await LtPlaceOrder_1.LtPlaceOrder.deleteOne({ 'id': Id });
         return true;
     }
     catch (error) {
@@ -143,5 +143,5 @@ const deleteOrder = async (Id) => {
     }
 };
 exports.default = {
-    getAllPlaceOrders_Data, createOrder, updateOrder, deleteOrder, createAndUpdateOrder,
+    getAllLtPlaceOrders_Data, createOrder, updateOrder, deleteOrder, createAndUpdateOrder
 };

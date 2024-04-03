@@ -1,10 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const ConfigureUser_1 = require("../models/ConfigureUser");
 const CounterTbls_1 = require("../models/CounterTbls");
+const Encrypt_Decrypt_Service_1 = __importDefault(require("./Encrypt_Decrypt_Service"));
 const getAllConfigures_Data = async () => {
     try {
+        let configures_Data_Lst = [];
         let ConfigureData = await ConfigureUser_1.ConfigureUser.find({}).then((Configures) => {
             return Configures;
         }).catch((e) => {
@@ -32,7 +37,9 @@ const getOneConfigure = async (ConfigureId) => {
     }
 };
 const createAndUpdateConfigure = async (newConfigure) => {
-    const ConfigureToInsert = new ConfigureUser_1.ConfigureUser(Object.assign(Object.assign({}, newConfigure), { updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+    let key = Encrypt_Decrypt_Service_1.default.encrypt(newConfigure.apiKey);
+    let secretKey = Encrypt_Decrypt_Service_1.default.encrypt(newConfigure.secretKey);
+    const ConfigureToInsert = new ConfigureUser_1.ConfigureUser(Object.assign(Object.assign({}, newConfigure), { apiKey: key, secretKey: secretKey, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
     try {
         const data = await ConfigureUser_1.ConfigureUser.findOne({ userId: ConfigureToInsert.userId });
         // let tempdata = await ConfigureUser.findOneAndUpdate({ userId: ConfigureToInsert.userId, apiKey: ConfigureToInsert.apiKey,
@@ -97,7 +104,9 @@ const createAndUpdateConfigure = async (newConfigure) => {
     }
 };
 const createNewConfigure = async (newConfigure) => {
-    const ConfigureToInsert = new ConfigureUser_1.ConfigureUser(Object.assign(Object.assign({}, newConfigure), { createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+    let key = Encrypt_Decrypt_Service_1.default.encrypt(newConfigure.apiKey);
+    let secretKey = Encrypt_Decrypt_Service_1.default.encrypt(newConfigure.secretKey);
+    const ConfigureToInsert = new ConfigureUser_1.ConfigureUser(Object.assign(Object.assign({}, newConfigure), { apiKey: key, secretKey: secretKey, createdDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }), updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
     try {
         let tepdata = await ConfigureUser_1.ConfigureUser.findOne({ userId: ConfigureToInsert.userId, apiKey: ConfigureToInsert.apiKey,
             keyName: ConfigureToInsert.keyName });
@@ -139,7 +148,9 @@ const updateOneConfigure = async (ConfigureId, changes) => {
         if (indexForUpdate == null) {
             throw { status: 400, message: `Can't find Configure with the id '${ConfigureId}'` };
         }
-        const updatedConfigure = new ConfigureUser_1.ConfigureUser(Object.assign(Object.assign({}, changes), { _id: indexForUpdate._id, id: ConfigureId, createdDate: indexForUpdate.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
+        let key = Encrypt_Decrypt_Service_1.default.encrypt(changes.apiKey);
+        let secretKey = Encrypt_Decrypt_Service_1.default.encrypt(changes.secretKey);
+        const updatedConfigure = new ConfigureUser_1.ConfigureUser(Object.assign(Object.assign({}, changes), { _id: indexForUpdate._id, id: ConfigureId, apiKey: key, secretKey: secretKey, createdDate: indexForUpdate.createdDate, updatedDate: new Date().toLocaleString("en-US", { timeZone: "UTC" }) }));
         let updateConfigures = await ConfigureUser_1.ConfigureUser.updateOne({ 'id': ConfigureId }, updatedConfigure)
             .then((Configure) => {
             if (Configure == null) {
@@ -187,7 +198,8 @@ const getAllConfigures_DataByUserId = async (id) => {
 };
 const getByApiKey = async (apiKey) => {
     try {
-        const ConfigureData = await ConfigureUser_1.ConfigureUser.findOne({ apiKey: apiKey });
+        let key = Encrypt_Decrypt_Service_1.default.encrypt(apiKey);
+        const ConfigureData = await ConfigureUser_1.ConfigureUser.findOne({ apiKey: key });
         if (ConfigureData == null) {
             throw {
                 status: 400,

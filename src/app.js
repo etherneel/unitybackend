@@ -34,7 +34,6 @@ const swaggerDocument = __importStar(require("./swagger.json"));
 const config = __importStar(require("../app.json"));
 const bodyParser = __importStar(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const OrderPlaceByWS_LeaderController_1 = __importDefault(require("./controller/TestByBitsAc/OrderPlaceByWS_LeaderController"));
 class App {
     constructor() {
         this.Start = (port) => {
@@ -60,8 +59,8 @@ class App {
     }
 }
 //const MONGO_URL = 'mongodb://localhost:27017/TaskManager';
-// const MONGO_URL = config.database.connectionstring; 
 const MONGO_URL = config.database.connectionstring1;
+// const MONGO_URL = config.database.connectionstring1; 
 // const options: mongoose.ConnectOptions = {
 const options = {
     family: 4,
@@ -77,5 +76,5 @@ mongoose_1.default.connection.on('error', (error) => console.log(error));
 // const key = 'HW3DnzSoGcgHe9K1Y3';
 // const secret = 'AsajHPtlpvWEtLyFdZiZDKvSfg0XaellKhgP';
 // ByBitsWebSocketClient.WEBSubscribe(key,secret);
-OrderPlaceByWS_LeaderController_1.default.OnWSInitByLeads();
+//  OrderPlaceByWS_LeaderController.OnWSInitByLeads();
 exports.default = App;

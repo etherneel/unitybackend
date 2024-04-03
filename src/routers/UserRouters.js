@@ -19,4 +19,5 @@ router.patch("/:id", (0, cors_1.default)(), UserController_1.default.updateOneUs
 router.delete("/:id", (0, cors_1.default)(), UserController_1.default.deleteOneUser);
 router.post("/subscribe", (0, cors_1.default)(), UserController_1.default.subscribeUser);
 router.get("/waddress/:id", (0, cors_1.default)(), UserController_1.default.parentWalletAddress);
+router.get("/chk/:id/:text", (0, cors_1.default)(), UserController_1.default.checkInDec);
 exports.default = router;

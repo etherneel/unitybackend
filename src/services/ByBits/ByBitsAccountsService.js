@@ -39,7 +39,7 @@ const get_Account_Info_By_User = async () => {
     const client = new bybit_api_1.RestClientV5({
         key: key,
         secret: secret,
-        testnet: config.ByBit.IS_TESTNET,
+        testnet: config.ByBit.IS_TESTNET
     });
     let data = await client.getAccountInfo()
         .then(result => {
@@ -64,7 +64,7 @@ const get_Wallet_Balance = async (model) => {
     });
     let data = await client.getWalletBalance({
         accountType: 'UNIFIED',
-        coin: 'BTC',
+        coin: 'USDT',
     })
         .then(result => {
         console.log("getAccountInfo result: ", result);

@@ -87,6 +87,29 @@ const placeOrder = async (clientModel, acModel) => {
         return { status: (error === null || error === void 0 ? void 0 : error.status) || 500, error: (error === null || error === void 0 ? void 0 : error.message) || error };
     }
 };
+const cancelOrder = async (clientModel, acModel) => {
+    try {
+        const client = new bybit_api_1.RestClientV5({
+            testnet: config.ByBit.IS_TESTNET,
+            key: acModel.key,
+            secret: acModel.secret,
+        });
+        client
+            .cancelOrder({
+            category: clientModel.category,
+            symbol: clientModel.symbol,
+            orderId: clientModel.orderId,
+        })
+            .then((response) => {
+            console.log(response);
+        })
+            .catch((error) => {
+            console.error(error);
+        });
+    }
+    catch (error) {
+    }
+};
 exports.default = {
-    get_Historic_Orders, placeOrder
+    get_Historic_Orders, placeOrder, cancelOrder
 };

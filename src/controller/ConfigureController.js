@@ -7,11 +7,32 @@ const ConfigureService_1 = __importDefault(require("../services/ConfigureService
 const UserService_1 = __importDefault(require("../services/UserService"));
 const ByBitsAccountService_1 = __importDefault(require("../services/ByBitsAc/ByBitsAccountService"));
 const AccountService_1 = __importDefault(require("../services/AccountService"));
+const Encrypt_Decrypt_Service_1 = __importDefault(require("../services/Encrypt_Decrypt_Service"));
 const getAllConfigures = async (req, res) => {
     try {
         let allConfigures = [];
+        let allConfigures_Data = [];
         allConfigures = await ConfigureService_1.default.getAllConfigures_Data();
-        res.send({ status: "200", data: allConfigures });
+        if (allConfigures.length != 0) {
+            allConfigures.forEach(ele => {
+                let model = {};
+                model.id = ele.id;
+                model.userId = ele.userId;
+                model.keyName = ele.keyName;
+                model.email = ele.email;
+                model.apiKey = Encrypt_Decrypt_Service_1.default.decrypt(ele.apiKey);
+                model.secretKey = Encrypt_Decrypt_Service_1.default.decrypt(ele.secretKey);
+                model.isMaster = ele.isMaster;
+                model.ipRestriction = ele.ipRestriction;
+                model.permissions = ele.permissions;
+                model.acDetail = ele.acDetail;
+                model.status = ele.status;
+                model.createdDate = ele.createdDate;
+                model.updatedDate = ele.updatedDate;
+                allConfigures_Data.push(model);
+            });
+        }
+        res.send({ status: 200, data: allConfigures_Data });
     }
     catch (error) {
         res
@@ -124,8 +145,9 @@ const createNewConfigure = async (req, res) => {
 const checkIsAvailbleAcDetail = async (userId, apiKey) => {
     const _acData = await AccountService_1.default.getAllAccounts_Data();
     // let isExists_Api_KEY = _acData.filter((x:any)=>x.apiKey == apiKey && x.UserId == userId);
-    let isExists_User = _acData.filter((x) => x.apiKey == apiKey && x.UserId == userId);
-    let isExists_Other_User = _acData.filter((x) => x.apiKey == apiKey && x.UserId != userId);
+    let key = Encrypt_Decrypt_Service_1.default.encrypt(apiKey);
+    let isExists_User = _acData.filter((x) => x.apiKey == key && x.UserId == userId);
+    let isExists_Other_User = _acData.filter((x) => x.apiKey == key && x.UserId != userId);
     // let isExists_UserId = isExists_Api_KEY.UserId == userId ? true : false;
     // let isExists_Id = isExists_Api_KEY.id == id ? true : false;
     if (isExists_Other_User.length != 0) {
@@ -170,8 +192,26 @@ const getConfigureByUserId = async (req, res) => {
         });
     }
     try {
-        const Configure = await ConfigureService_1.default.getAllConfigures_DataByUserId(UserId);
-        res.send({ status: 200, data: Configure });
+        const ele = await ConfigureService_1.default.getAllConfigures_DataByUserId(UserId);
+        if (ele.length != 0) {
+            let model = {};
+            model.id = ele[0].id;
+            model.userId = ele[0].userId;
+            model.keyName = ele[0].keyName;
+            model.email = ele[0].email;
+            model.apiKey = Encrypt_Decrypt_Service_1.default.decrypt(ele[0].apiKey);
+            model.secretKey = Encrypt_Decrypt_Service_1.default.decrypt(ele[0].secretKey);
+            model.isMaster = ele[0].isMaster;
+            model.ipRestriction = ele[0].ipRestriction;
+            model.permissions = ele[0].permissions;
+            model.acDetail = ele[0].acDetail;
+            model.status = ele[0].status;
+            model.createdDate = ele[0].createdDate;
+            model.updatedDate = ele[0].updatedDate;
+            res.send({ status: 200, data: model });
+            return;
+        }
+        res.send({ status: 200, data: ele });
     }
     catch (error) {
         res
@@ -294,10 +334,11 @@ const createNewUseWithConfigure = async (req, res) => {
 };
 const ischeckAvilableUser = async (apiKey, email, UserId = 0) => {
     try {
+        let key = Encrypt_Decrypt_Service_1.default.encrypt(apiKey);
         const acDetails = await AccountService_1.default.getAllAccounts_Data();
         const UserDetails = await UserService_1.default.getAllUsers_Data();
         let isUserExists = UserDetails.filter((x) => x.email == email && x.id != UserId);
-        let isAcExists = acDetails.filter((x) => x.apiKey == apiKey && x.userId != UserId);
+        let isAcExists = acDetails.filter((x) => x.apiKey == key && x.userId != UserId);
         if (isAcExists.length != 0) {
             return 1;
         }

@@ -29,9 +29,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bybit_api_1 = require("bybit-api");
 const OrderPlaceByWS_LeaderController_1 = __importDefault(require("../../controller/TestByBitsAc/OrderPlaceByWS_LeaderController"));
+const config = __importStar(require("../../../app.json"));
 // or
 // import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from 'bybit-api';
-const config = __importStar(require("../../../app.json"));
 // Create & inject a custom logger to disable the silly logging level (empty function)
 const logger = Object.assign(Object.assign({}, bybit_api_1.DefaultLogger), { silly: () => { } });
 // const key = 'HW3DnzSoGcgHe9K1Y3';
@@ -45,20 +45,21 @@ const logger = Object.assign(Object.assign({}, bybit_api_1.DefaultLogger), { sil
  * - Heartbeats/ping/pong/reconnects are all handled automatically.
  *    If a connection drops, the client will clean it up, respawn a fresh connection and resubscribe for you.
  */
-const WEBSubscribe = (key, secret) => {
+const WEBSubscribe = (key, secret, acUserID = 0) => {
     const wsClient = new bybit_api_1.WebsocketClient({
         key: key,
         secret: secret,
         market: 'v5',
         testnet: config.ByBit.IS_TESTNET,
     }, logger);
-    let resData = {};
+    let resData;
+    debugger;
     wsClient.on('update', (data) => {
         // assert(CurrentOrder.length == 0);
         console.log('raw message received ', JSON.stringify(data));
         resData = JSON.stringify(data);
         // CurrentOrder.push(resData);
-        let LtData = { key: key, secret: secret, testnet: config.ByBit.IS_TESTNET };
+        let LtData = { key: key, secret: secret, testnet: config.ByBit.IS_TESTNET, acUserID: acUserID };
         OrderPlaceByWS_LeaderController_1.default.CreateWsLeadTrack(LtData, resData);
         return resData;
         // console.log('raw message received ', JSON.stringify(data, null, 2));
